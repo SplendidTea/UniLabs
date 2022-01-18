@@ -1,0 +1,1 @@
+Lab 2 consisted of creating a reader and writer TASK 1 is without semaphores and is built to fail, task 2 has semaphores and should work

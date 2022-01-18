@@ -1,0 +1,318 @@
+<html><body onload='javascript:getQuestions()'>
+<label id='question1lbl'>Default LABEL</label><br/>
+<input type="radio" id="a1q1" name="a1" value="0" onchange='javascript:sendAnswer1()'>
+  <label for="a1q1">true</label><br/>
+<input type="radio" id="a2q1" name="a1" value="1"onchange='javascript:sendAnswer1()'>
+  <label for="a2q1">false</label><br/>
+<br/><label id='isCorrect1'>Click on a button to see if its right</label><br/>
+
+<br/>
+<label id='question2lbl'>Default LABEL</label><br/>
+<input type="radio" id="a1q2" name="a2" value="0" onchange='javascript:sendAnswer2()'>
+  <label for="a1q2">0.9</label><br/>
+<input type="radio" id="a2q2" name="a2" value="1"onchange='javascript:sendAnswer2()'>
+  <label for="a2q2">1.0</label><br/>
+<input type="radio" id="a3q2" name="a2" value="2" onchange='javascript:sendAnswer2()'>
+  <label for="a3q2">1.1</label><br/>
+<input type="radio" id="a4q2" name="a2" value="3"onchange='javascript:sendAnswer2()'>
+  <label for="a4q2">None of the above</label><br/>
+<br/><label id='isCorrect2'>Click on a button to see if its right</label><br/>
+<br/>
+
+
+<label id='question3lbl'>Default LABEL</label><br/>
+<input type="radio" id="a1q3" name="a3" value="0" onchange='javascript:sendAnswer3()'>
+  <label for="a1q3">0.9</label><br/>
+<input type="radio" id="a2q3" name="a3" value="1"onchange='javascript:sendAnswer3()'>
+  <label for="a2q3">1.0</label><br/>
+<input type="radio" id="a3q3" name="a3" value="2" onchange='javascript:sendAnswer3()'>
+  <label for="a3q3">1.1</label><br/>
+<input type="radio" id="a4q3" name="a3" value="3"onchange='javascript:sendAnswer3()'>
+<label for="a4q3">None of the above</label><br/>
+<br/><label id='isCorrect3'>Click on a button to see if its right</label><br/>
+<br/>
+
+
+<label id='question4lbl'>Default LABEL</label><br/>
+<input type="radio" id="a1q4" name="a4" value="0" onchange='javascript:sendAnswer4()'>
+  <label for="a1q4">true</label><br/>
+<input type="radio" id="a2q4" name="a4" value="1"onchange='javascript:sendAnswer4()'>
+  <label for="a2q4">false</label><br/>
+<br/><label id='isCorrect4'>Click on a button to see if its right</label><br/>
+<br/>
+
+
+<label id='question5lbl'>Default LABEL</label><br/>
+<input type="radio" id="a1q5" name="a5" value="0" onchange='javascript:sendAnswer5()'>
+  <label for="a1q5">true</label><br/>
+<input type="radio" id="a2q5" name="a5" value="1"onchange='javascript:sendAnswer5()'>
+  <label for="a2q5">false</label><br/>
+<br/><label id='isCorrect5'>Click on a button to see if its right</label><br/>
+
+<br/>
+<br/>
+
+<button type="button" onclick='javascript:sendMark()'> Click me to get marks</button>
+<br/>
+<label id='finalmark'>MARK WILL BE DISPLAYED HERE</label>
+</body>
+
+<script>
+
+    //I know its bad form to keep the scripts in the html file but I wanted to show what was running client side and what was running server side
+    let stArr=[];
+    function getQuestions() {
+
+        // onload gets the questions
+        let xReq= new XMLHttpRequest();
+        xReq.onreadystatechange=displayQuestions;
+
+        xReq.open('GET','/qs',true);
+        xReq.send();
+    }
+
+    function displayQuestions() {
+
+        //on load this allows the questions to be seen gets the values from the server
+        if(this.readyState==4 && this.status ==200)
+        {
+            let qArray=JSON.parse(this.responseText)
+            let lbl1=document.getElementById('question1lbl');
+            let lbl2=document.getElementById('question2lbl');
+            let lbl3=document.getElementById('question3lbl');
+            let lbl4=document.getElementById('question4lbl');
+            let lbl5=document.getElementById('question5lbl');
+
+            lbl1.innerHTML=qArray[0];
+            lbl2.innerHTML=qArray[1];
+            lbl3.innerHTML=qArray[2];
+            lbl4.innerHTML=qArray[3];
+            lbl5.innerHTML=qArray[4];
+        }
+
+    }
+
+    function sendAnswer1() {
+        //sends a post request to the server with a value from 0-4
+        let xReq= new XMLHttpRequest();
+
+
+        xReq.open('POST','/a1?',true);
+        xReq.onreadystatechange=displayAnswer1;
+        xReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        if (document.getElementById('a1q1').checked)
+        {
+stArr[0]=0;
+    xReq.send("value=0&ans=true");
+        }
+    else if(document.getElementById('a2q1').checked)
+    {
+        stArr[0]=1;
+    xReq.send("value=1&ans=false");
+    }
+
+
+
+
+    }
+
+    function displayAnswer1() {
+//recives a response and sets the text of the indicated label to that value
+    if(this.readyState == 4 && this.status == 200)
+    {
+    let ans=this.responseText;
+
+    let lbl1=document.getElementById('isCorrect1');
+    lbl1.innerHTML=ans;
+
+
+    }
+    }
+
+
+    function sendAnswer2(){ //sends a post request to the server with a value from 0-4
+    let xReq= new XMLHttpRequest();
+    xReq.open('POST','/a2?',true);
+        xReq.onreadystatechange=displayAnswer2;
+        xReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        if (document.getElementById('a1q2').checked)
+        {
+            stArr[1]=0;
+            xReq.send("value=0&ans=true");
+        }
+        else if(document.getElementById('a2q2').checked)
+        {
+            stArr[1]=1;
+            xReq.send("value=1&ans=false");
+        }
+        if (document.getElementById('a3q2').checked)
+        {
+            stArr[1]=2;
+            xReq.send("value=2&ans=true");
+        }
+        else if(document.getElementById('a4q2').checked)
+        {
+            stArr[1]=3;
+            xReq.send("value=3&ans=false");
+        }
+
+
+
+    }
+
+    function displayAnswer2() {
+if(this.readyState==4 && this.status== 200)
+{//recives a response and sets the text of the indicated label to that value
+    let ans=this.responseText;
+    let lbl2=document.getElementById('isCorrect2');
+    lbl2.innerHTML=ans;
+}
+    }
+
+function sendAnswer3()
+{ //sends a post request to the server with a value from 0-4
+    let xReq= new XMLHttpRequest();
+    xReq.open('POST','/a3?',true);
+    xReq.onreadystatechange=displayAnswer3;
+    xReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    if (document.getElementById('a1q3').checked)
+    {
+        stArr[2]=0;
+        xReq.send("value=0&ans=true");
+    }
+    else if(document.getElementById('a2q3').checked)
+    {
+        stArr[2]=1;
+        xReq.send("value=1&ans=false");
+    }
+    if (document.getElementById('a3q3').checked)
+    {
+        stArr[2]=2;
+        xReq.send("value=2&ans=true");
+    }
+    else if(document.getElementById('a4q3').checked)
+    {
+        stArr[2]=3;
+        xReq.send("value=3&ans=false");
+    }
+}
+
+function displayAnswer3()
+{//recives a response and sets the text of the indicated label to that value
+    if(this.readyState==4 && this.status== 200)
+    {
+        let ans=this.responseText;
+        let lbl3=document.getElementById('isCorrect3');
+        lbl3.innerHTML=ans;
+    }
+
+
+
+}
+
+
+
+function sendAnswer4() { //sends a post request to the server with a value from 0-4
+    let xReq= new XMLHttpRequest();
+
+
+    xReq.open('POST','/a4?',true);
+    xReq.onreadystatechange=displayAnswer4;
+    xReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    if (document.getElementById('a1q4').checked)
+    {
+        stArr[3]=0;
+        xReq.send("value=0&ans=true");
+    }
+    else if(document.getElementById('a2q4').checked)
+    {
+        stArr[3]=1;
+        xReq.send("value=1&ans=false");
+    }
+
+
+
+
+}
+
+function displayAnswer4() {
+//recives a response and sets the text of the indicated label to that value
+    if(this.readyState == 4 && this.status == 200)
+    {
+        let ans=this.responseText;
+
+        let lbl4=document.getElementById('isCorrect4');
+        lbl4.innerHTML=ans;
+
+
+    }
+}
+
+
+function sendAnswer5() { //sends a post request to the server with a value from 0-4
+    let xReq= new XMLHttpRequest();
+
+
+    xReq.open('POST','/a5?',true);
+    xReq.onreadystatechange=displayAnswer5;
+    xReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    if (document.getElementById('a1q5').checked)
+    {
+        stArr[4]=0;
+        xReq.send("value=0&ans=true");
+    }
+    else if(document.getElementById('a2q5').checked)
+    {
+        stArr[4]=1;
+        xReq.send("value=1&ans=false");
+    }
+
+
+
+
+}
+
+function displayAnswer5() {
+//recives a response and sets the text of the indicated label to that value
+    if(this.readyState == 4 && this.status == 200)
+    {
+        let ans=this.responseText;
+
+        let lbl5=document.getElementById('isCorrect5');
+        lbl5.innerHTML=ans;
+
+    }
+}
+
+
+function  sendMark() { //sends a post request to the server with all the values from the questions
+    let xReq= new XMLHttpRequest();
+    xReq.open('POST' , '/final' ,true);
+    xReq.onreadystatechange=displayMark;
+    xReq.setRequestHeader("Content-type", "application/json");
+    xReq.send(JSON.stringify({
+        value: [stArr[0],stArr[1],stArr[2],stArr[3],stArr[4]]
+    }));
+
+
+
+
+}
+
+function displayMark() {
+if(this.readyState==4 && this.status==200)
+{
+//recives a response and sets the text of the indicated label to that value
+    let finalans=this.responseText;
+    let lbl6 =document.getElementById('finalmark');
+    lbl6.innerHTML="Congrats you get " +finalans+" stars out of 5 total stars";
+}
+}
+
+</script>
+
+
+</html>

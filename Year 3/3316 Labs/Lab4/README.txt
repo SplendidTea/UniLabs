@@ -1,0 +1,1 @@
+AJAX SERVER quiz assignment, we were required to fetch questions from a JSON and check the answers server side
