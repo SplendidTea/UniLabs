@@ -1,0 +1,1 @@
+These commands were used in a Covid 19 Database create as a course final project
